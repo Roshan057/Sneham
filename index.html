@@ -65,6 +65,8 @@
     <h1>Will you be my Valentine? 💘</h1>
     <button id="yes">Yes 💖</button>
     <button id="no">No 🙃</button>
+    <p id="tease" style="color:white; margin-top:20px;"></p>
+
   </div>
 
   <div class="container" id="result">
@@ -80,16 +82,41 @@
   const yesBtn = document.getElementById("yes");
   const question = document.getElementById("question");
   const result = document.getElementById("result");
+  const tease = document.getElementById("tease");
+
+  let scale = 1;
+  const messages = [
+    "Nice try 😌",
+    "Almost had it 😏",
+    "Hmm nope 🙃",
+    "Just say yes already 💕",
+    "You know you want to 😈"
+  ];
 
   function moveButton(e) {
-    e.preventDefault(); // stops click from happening
-    const x = Math.random() * (window.innerWidth - 120);
-    const y = Math.random() * (window.innerHeight - 60);
+    e.preventDefault();
+
+    const touch = e.touches ? e.touches[0] : e;
+    const offsetX = (Math.random() * 200) - 100;
+    const offsetY = (Math.random() * 200) - 100;
+
+    let x = touch.clientX + offsetX;
+    let y = touch.clientY + offsetY;
+
+    x = Math.max(10, Math.min(window.innerWidth - 120, x));
+    y = Math.max(10, Math.min(window.innerHeight - 60, y));
+
     noBtn.style.left = x + "px";
     noBtn.style.top = y + "px";
+
+    // shrink button
+    scale -= 0.05;
+    noBtn.style.transform = `scale(${scale})`;
+
+    // tease message
+    tease.innerText = messages[Math.floor(Math.random() * messages.length)];
   }
 
-  // IMPORTANT: move BEFORE click registers
   noBtn.addEventListener("touchstart", moveButton);
   noBtn.addEventListener("mousedown", moveButton);
 
@@ -98,6 +125,7 @@
     result.style.display = "block";
   });
 </script>
+
 
 </body>
 </html>
